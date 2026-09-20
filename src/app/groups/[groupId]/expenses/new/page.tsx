@@ -4,7 +4,7 @@ import { use } from "react";
 import { useRouter } from "next/navigation";
 import { useGroup } from "@/hooks/useGroup";
 import { useExpenses } from "@/hooks/useExpenses";
-import { ExpenseForm } from "@/app/components/ExpenseForm";
+import { ExpenseForm } from "@/components/ExpenseForm";
 
 export default function NewExpensePage({
   params,

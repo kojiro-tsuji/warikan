@@ -4,8 +4,8 @@ import { use } from "react";
 import Link from "next/link";
 import { useGroup } from "@/hooks/useGroup";
 import { useExpenses } from "@/hooks/useExpenses";
-import { ExpenseList } from "@/app/components/ExpenseList";
-import { SettlementResult } from "@/app/components/SettlementResult";
+import { ExpenseList } from "@/components/ExpenseList";
+import { SettlementResult } from "@/components/SettlementResult";
 
 export default function GroupPage({
   params,
