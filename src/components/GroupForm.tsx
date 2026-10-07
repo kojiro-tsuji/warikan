@@ -42,8 +42,13 @@ export function GroupForm() {
     }
 
     setIsSubmitting(true);
-    const group = await repository.createGroup(trimmedGroupName, trimmedMemberNames);
-    router.push(`/groups/${group.id}`);
+    try {
+      const group = await repository.createGroup(trimmedGroupName, trimmedMemberNames);
+      router.push(`/groups/${group.id}`);
+    } catch {
+      setError("グループの作成に失敗しました。もう一度お試しください");
+      setIsSubmitting(false);
+    }
   }
 
   return (

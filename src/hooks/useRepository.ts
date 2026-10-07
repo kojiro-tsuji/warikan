@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 import { WarikanRepository } from "@/data/repository";
-import { LocalStorageRepository } from "@/data/localStorageRepository";
+import { ApiRepository } from "@/data/apiRepository";
 
 export function useRepository(): WarikanRepository {
-  return useMemo(() => new LocalStorageRepository(), []);
+  return useMemo(() => new ApiRepository(), []);
 }

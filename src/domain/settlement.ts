@@ -9,16 +9,22 @@ export function calculateSettlement(
     balance[member.id] = 0;
   }
 
+  const memberOrder = new Map(members.map((member, index) => [member.id, index]));
+  const orderOf = (memberId: string) => memberOrder.get(memberId) ?? Number.MAX_SAFE_INTEGER;
+
+  // 1円単位で割り、割り切れない端数はメンバー順に1円ずつ負担する。
+  // 残高が常に整数かつ合計0になるので、精算額に端数のズレが出ない
   for (const expense of expenses) {
-    const share = expense.amount / expense.participantIds.length;
+    const participantIds = [...expense.participantIds].sort((a, b) => orderOf(a) - orderOf(b));
+    const baseShare = Math.floor(expense.amount / participantIds.length);
+    let remainder = expense.amount - baseShare * participantIds.length;
+
     balance[expense.payerId] = (balance[expense.payerId] ?? 0) + expense.amount;
-    for (const participantId of expense.participantIds) {
+    for (const participantId of participantIds) {
+      const share = remainder > 0 ? baseShare + 1 : baseShare;
+      if (remainder > 0) remainder--;
       balance[participantId] = (balance[participantId] ?? 0) - share;
     }
-  }
-
-  for (const memberId of Object.keys(balance)) {
-    balance[memberId] = Math.round(balance[memberId]);
   }
 
   const creditors = Object.entries(balance)

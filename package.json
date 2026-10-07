@@ -6,18 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@vercel/functions": "^3.9.11",
+    "drizzle-orm": "^0.45.3",
     "next": "16.3.5",
+    "pg": "^8.23.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "swr": "^2.5.1"
+    "server-only": "^0.0.1",
+    "swr": "^2.5.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.6",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "typescript": "^5"

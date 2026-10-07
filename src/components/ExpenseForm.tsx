@@ -39,8 +39,8 @@ export function ExpenseForm({
       return;
     }
 
-    if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
-      setError("金額は1円以上の数値で入力してください");
+    if (!Number.isInteger(amountNumber) || amountNumber <= 0) {
+      setError("金額は1円以上の整数で入力してください");
       return;
     }
 
@@ -50,12 +50,17 @@ export function ExpenseForm({
     }
 
     setIsSubmitting(true);
-    await onSubmit({
-      description: description.trim(),
-      amount: amountNumber,
-      payerId,
-      participantIds,
-    });
+    try {
+      await onSubmit({
+        description: description.trim(),
+        amount: amountNumber,
+        payerId,
+        participantIds,
+      });
+    } catch {
+      setError("支出の追加に失敗しました。もう一度お試しください");
+      setIsSubmitting(false);
+    }
   }
 
   return (
