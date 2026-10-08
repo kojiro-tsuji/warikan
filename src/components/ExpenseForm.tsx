@@ -22,6 +22,12 @@ export function ExpenseForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const amountValue = Number(amount);
+  const perPerson =
+    Number.isInteger(amountValue) && amountValue > 0 && participantIds.length > 0
+      ? amountValue / participantIds.length
+      : null;
+
   function toggleParticipant(memberId: string) {
     setParticipantIds((prev) =>
       prev.includes(memberId) ? prev.filter((id) => id !== memberId) : [...prev, memberId]
@@ -64,33 +70,39 @@ export function ExpenseForm({
   }
 
   return (
-    <form className="card" onSubmit={handleSubmit}>
+    <form className="card" onSubmit={handleSubmit} noValidate>
       <label className="field">
-        <span>内容</span>
+        <span className="fieldLabel">内容</span>
         <input
           className="input"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="例: ホテル代"
+          maxLength={100}
         />
       </label>
 
       <label className="field">
-        <span>金額</span>
-        <input
-          className="input"
-          type="number"
-          inputMode="numeric"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="例: 12000"
-        />
+        <span className="fieldLabel">金額</span>
+        <div className="inputPrefix">
+          <span aria-hidden="true">¥</span>
+          <input
+            className="input amount"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            step={1}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="12000"
+          />
+        </div>
       </label>
 
       <label className="field">
-        <span>立て替えた人</span>
+        <span className="fieldLabel">立て替えた人</span>
         <select
-          className="input"
+          className="input select"
           value={payerId}
           onChange={(e) => setPayerId(e.target.value)}
         >
@@ -102,19 +114,27 @@ export function ExpenseForm({
         </select>
       </label>
 
-      <div className="field">
-        <span>割る対象者</span>
-        {members.map((member) => (
-          <label key={member.id} className="checkboxRow">
-            <input
-              type="checkbox"
-              checked={participantIds.includes(member.id)}
-              onChange={() => toggleParticipant(member.id)}
-            />
-            {member.name}
-          </label>
-        ))}
-      </div>
+      <fieldset className="field" style={{ border: "none" }}>
+        <legend className="fieldLabel" style={{ marginBottom: 6 }}>割る対象者</legend>
+        <div className="checkList">
+          {members.map((member) => (
+            <label key={member.id} className="checkboxRow">
+              <input
+                type="checkbox"
+                checked={participantIds.includes(member.id)}
+                onChange={() => toggleParticipant(member.id)}
+              />
+              {member.name}
+            </label>
+          ))}
+        </div>
+        {perPerson !== null && (
+          <p className="muted">
+            1人あたり {Number.isInteger(perPerson) ? "" : "約"}¥
+            {Math.ceil(perPerson).toLocaleString()}
+          </p>
+        )}
+      </fieldset>
 
       {error && <p className="error">{error}</p>}
 

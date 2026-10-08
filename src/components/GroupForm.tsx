@@ -53,40 +53,46 @@ export function GroupForm() {
 
   return (
     <form className="card" onSubmit={handleSubmit}>
+      <h2 className="tape">グループを作る</h2>
+
       <label className="field">
-        <span>グループ名</span>
+        <span className="fieldLabel">グループ名</span>
         <input
           className="input"
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
           placeholder="例: 沖縄旅行"
+          maxLength={50}
         />
       </label>
 
       <div className="field">
-        <span>メンバー</span>
+        <span className="fieldLabel">メンバー</span>
         {memberNames.map((name, index) => (
-          <div key={index} className="rowBetween">
+          <div key={index} className="rowBetween" style={{ gap: 8 }}>
             <input
               className="input"
               value={name}
               onChange={(e) => updateMemberName(index, e.target.value)}
               placeholder={`メンバー${index + 1}`}
+              aria-label={`メンバー${index + 1}の名前`}
+              maxLength={30}
               style={{ flex: 1 }}
             />
             {memberNames.length > 2 && (
               <button
                 type="button"
-                className="buttonGhost"
+                className="iconButton"
                 onClick={() => removeMemberField(index)}
+                aria-label={`メンバー${index + 1}を削除`}
               >
-                削除
+                ×
               </button>
             )}
           </div>
         ))}
         <button type="button" className="buttonGhost" onClick={addMemberField}>
-          + メンバーを追加
+          ＋ メンバーを追加
         </button>
       </div>
 

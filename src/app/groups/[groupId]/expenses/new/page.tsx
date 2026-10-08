@@ -1,10 +1,12 @@
 "use client";
 
 import { use } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGroup } from "@/hooks/useGroup";
 import { useExpenses } from "@/hooks/useExpenses";
 import { ExpenseForm } from "@/components/ExpenseForm";
+import { StatusMessage } from "@/components/StatusMessage";
 
 export default function NewExpensePage({
   params,
@@ -17,19 +19,11 @@ export default function NewExpensePage({
   const { addExpense } = useExpenses(groupId);
 
   if (isLoading) {
-    return (
-      <div className="container">
-        <p>読み込み中...</p>
-      </div>
-    );
+    return <StatusMessage message="読み込み中..." />;
   }
 
   if (!group) {
-    return (
-      <div className="container">
-        <p>グループが見つかりません</p>
-      </div>
-    );
+    return <StatusMessage message="グループが見つかりません" showHomeLink />;
   }
 
   async function handleSubmit(input: {
@@ -44,7 +38,10 @@ export default function NewExpensePage({
 
   return (
     <div className="container">
-      <h1>支出を追加</h1>
+      <Link href={`/groups/${groupId}`} className="backLink">
+        ← {group.name}に戻る
+      </Link>
+      <h1 className="tape" style={{ fontSize: 20 }}>支出を追加</h1>
       <ExpenseForm members={group.members} onSubmit={handleSubmit} />
     </div>
   );
