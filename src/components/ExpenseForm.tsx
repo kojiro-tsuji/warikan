@@ -18,7 +18,7 @@ export function ExpenseForm({
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [payerId, setPayerId] = useState(members[0]?.id ?? "");
-  const [participantIds, setParticipantIds] = useState<string[]>(members.map((m) => m.id));
+  const [participantIds, setParticipantIds] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
